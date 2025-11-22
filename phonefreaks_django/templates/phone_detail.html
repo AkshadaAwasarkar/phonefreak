@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-24 py-12">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <!-- Image Section -->
+        <div class="bg-gray-50 rounded-3xl p-8 flex items-center justify-center">
+            <img src="{{ phone.image }}" alt="{{ phone.model }}"
+                class="max-h-[500px] object-contain hover:scale-105 transition-transform duration-500">
+        </div>
+
+        <!-- Info Section -->
+        <div>
+            <div class="mb-6">
+                <span class="text-blue-600 font-medium">{{ phone.brand }}</span>
+                <h1 class="text-4xl font-bold mt-2 mb-4">{{ phone.model }}</h1>
+                <p class="text-gray-600 text-lg">{{ phone.description }}</p>
+            </div>
+
+            <div class="flex flex-wrap gap-2 mb-8">
+                {% for tag in phone.tags %}
+                <span class="px-3 py-1 bg-gray-100 text-sm font-medium rounded-full">{{ tag }}</span>
+                {% endfor %}
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 mb-8">
+                <div class="p-4 border border-gray-200 rounded-xl">
+                    <p class="text-sm text-gray-500 mb-1">Amazon Price</p>
+                    <p class="text-2xl font-bold">₹{{ phone.prices.amazon }}</p>
+                    <a href="#" class="text-blue-600 text-sm hover:underline mt-1 block">Buy on Amazon &rarr;</a>
+                </div>
+                <div class="p-4 border border-gray-200 rounded-xl">
+                    <p class="text-sm text-gray-500 mb-1">Flipkart Price</p>
+                    <p class="text-2xl font-bold">₹{{ phone.prices.flipkart }}</p>
+                    <a href="#" class="text-blue-600 text-sm hover:underline mt-1 block">Buy on Flipkart &rarr;</a>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <h3 class="text-xl font-bold">Specifications</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {% for key, value in phone.specs.items %}
+                    <div class="border-b border-gray-100 pb-2">
+                        <p class="text-sm text-gray-500 capitalize">{{ key|cut:"_" }}</p>
+                        <p class="font-medium">{{ value }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="mt-10 flex gap-4">
+                <button
+                    class="flex-1 bg-black text-white py-4 rounded-full font-medium hover:bg-gray-800 transition-colors">
+                    Add to Wishlist
+                </button>
+                <a href="{% url 'compare' %}?phone1={{ phone.id }}"
+                    class="flex-1 border border-gray-300 text-center py-4 rounded-full font-medium hover:bg-gray-50 transition-colors">
+                    Compare
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

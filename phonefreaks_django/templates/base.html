@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhoneFreaks - Compare Phone Prices</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-white text-gray-900 min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <header class="fixed top-0 left-0 right-0 h-16 bg-white/95 backdrop-blur z-50 border-b border-gray-100">
+        <div class="container mx-auto h-full px-6 md:px-12 lg:px-24 flex items-center justify-between">
+            <div class="flex items-center">
+                <a href="{% url 'index' %}" class="font-medium text-xl mr-12">PhoneFreaks</a>
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="{% url 'index' %}"
+                        class="text-sm text-gray-500 hover:text-black transition-colors">Home</a>
+                    <a href="#" class="text-sm text-gray-500 hover:text-black transition-colors">Shop</a>
+                    <a href="{% url 'compare' %}"
+                        class="text-sm text-gray-500 hover:text-black transition-colors">Compare</a>
+                </nav>
+            </div>
+
+            <div class="flex items-center space-x-6">
+                <a href="{% url 'wishlist' %}" class="text-gray-500 hover:text-black">
+                    <i data-lucide="heart" class="h-5 w-5"></i>
+                </a>
+
+                {% if user.is_authenticated %}
+                {% if user.userprofile.role == 'admin' %}
+                <a href="{% url 'admin_dashboard' %}"
+                    class="text-sm text-gray-500 hover:text-black transition-colors">Dashboard</a>
+                <a href="{% url 'manage_users' %}"
+                    class="text-sm text-gray-500 hover:text-black transition-colors">Manage Users</a>
+                {% endif %}
+                <div class="relative" id="userMenuContainer">
+                    <button id="userMenuButton" type="button" class="flex items-center space-x-2 focus:outline-none">
+                        <div
+                            class="h-8 w-8 bg-gray-100 rounded-full flex items-center justify-center text-sm font-medium">
+                            {{ user.username|first|upper }}
+                        </div>
+                    </button>
+                    <div id="userMenuDropdown"
+                        class="absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-md shadow-lg py-1 hidden z-50">
+                        {% if user.userprofile.role == 'admin' %}
+                        <a href="{% url 'admin_dashboard' %}"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</a>
+                        <a href="{% url 'manage_users' %}"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Manage Users</a>
+                        <div class="border-t border-gray-100"></div>
+                        {% endif %}
+                        <a href="{% url 'wishlist' %}"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Wishlist</a>
+                        <div class="border-t border-gray-100"></div>
+                        <a href="{% url 'logout' %}"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sign Out</a>
+                    </div>
+                </div>
+                {% else %}
+                <div class="flex space-x-2">
+                    <a href="{% url 'user_login' %}"
+                        class="rounded-full px-4 py-2 bg-black text-white text-sm font-medium hover:bg-gray-800 transition-colors">Login
+                        as User</a>
+                    <a href="{% url 'admin_login' %}"
+                        class="rounded-full px-4 py-2 border border-black text-black text-sm font-medium hover:bg-gray-50 transition-colors">Login
+                        as Admin</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow pt-16">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-50 border-t border-gray-100 mt-auto">
+        <div class="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-24 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="font-medium text-lg mb-4">PhoneFreaks</h3>
+                    <p class="text-gray-500 text-sm mb-4">Compare the latest smartphones and find the best prices across
+                        major retailers.</p>
+                </div>
+                <div>
+                    <h3 class="font-medium text-lg mb-4">Quick Links</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="{% url 'index' %}" class="text-gray-500 hover:text-black">Home</a></li>
+                        <li><a href="#" class="text-gray-500 hover:text-black">Shop</a></li>
+                        <li><a href="{% url 'compare' %}" class="text-gray-500 hover:text-black">Compare</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-medium text-lg mb-4">Brands</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="text-gray-500 hover:text-black">Apple</a></li>
+                        <li><a href="#" class="text-gray-500 hover:text-black">Samsung</a></li>
+                        <li><a href="#" class="text-gray-500 hover:text-black">Google</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-medium text-lg mb-4">Contact</h3>
+                    <ul class="space-y-2 text-sm text-gray-500">
+                        <li>Email: info@phonefreaks.com</li>
+                        <li>Phone: +91 1234567890</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-200 mt-8 pt-8 text-center text-gray-500 text-sm">
+                <p>&copy; 2025 PhoneFreaks. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        // User menu dropdown functionality
+        const userMenuButton = document.getElementById('userMenuButton');
+        const userMenuDropdown = document.getElementById('userMenuDropdown');
+
+        if (userMenuButton && userMenuDropdown) {
+            // Toggle dropdown on button click
+            userMenuButton.addEventListener('click', function (e) {
+                e.stopPropagation();
+                userMenuDropdown.classList.toggle('hidden');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function (e) {
+                if (!userMenuDropdown.classList.contains('hidden')) {
+                    userMenuDropdown.classList.add('hidden');
+                }
+            });
+
+            // Prevent dropdown from closing when clicking inside it
+            userMenuDropdown.addEventListener('click', function (e) {
+                e.stopPropagation();
+            });
+        }
+    </script>
+</body>
+
+</html>
